@@ -19,8 +19,8 @@ func main() {
 
 	http.HandleFunc("/{id}", func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
-		path := r.PathValue("id")
-		grain, _ := actorSystem.GrainIdentity(ctx, path, NewCounter(path))
+		id := r.PathValue("id")
+		grain, _ := actorSystem.GrainIdentity(ctx, id, NewCounter(id))
 		message := &IncrementRequest{}
 
 		res, err := actorSystem.AskGrain(ctx, grain, message, time.Millisecond*10)
@@ -37,7 +37,7 @@ func main() {
 			return
 		}
 
-		fmt.Fprintf(w, "page count: %d", count.Value)
+		fmt.Fprintf(w, "ID %s, page count: %d", id, count.Value)
 	})
 	http.ListenAndServe(":8089", nil)
 }
