@@ -1,6 +1,6 @@
 module page-counter
 
-go 1.24.2
+go 1.24.4
 
 require github.com/tochemey/goakt/v3 v3.7.0
 

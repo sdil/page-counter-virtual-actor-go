@@ -23,14 +23,7 @@ func main() {
 		grain, _ := actorSystem.GrainIdentity(ctx, path, NewCounter(path))
 		message := &IncrementRequest{}
 
-		now := time.Now()
 		res, err := actorSystem.AskGrain(ctx, grain, message, time.Millisecond*10)
-		finish := time.Now()
-		duration := finish.Sub(now)
-		if duration > time.Second*1 {
-			fmt.Println("Time taken", duration, path, "message:", message)
-		}
-
 		if err != nil {
 			fmt.Println("error", err.Error())
 			http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -43,8 +36,8 @@ func main() {
 			http.Error(w, "invalid response", http.StatusInternalServerError)
 			return
 		}
+
 		fmt.Fprintf(w, "page count: %d", count.Value)
-		// fmt.Fprintf(w, "page count")
 	})
 	http.ListenAndServe(":8089", nil)
 }
