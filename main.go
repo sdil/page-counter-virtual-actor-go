@@ -1,13 +1,15 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"net/http"
-	"context"
+	"os"
+	"os/signal"
+	"syscall"
 	"time"
 
 	"github.com/tochemey/goakt/v3/actor"
-
 )
 
 func main() {
@@ -39,5 +41,16 @@ func main() {
 
 		fmt.Fprintf(w, "ID %s, page count: %d", id, count.Value)
 	})
-	http.ListenAndServe(":8089", nil)
+
+	shutdown := make(chan os.Signal, 1)
+	signal.Notify(shutdown, os.Interrupt, syscall.SIGTERM)
+	
+	go func() {
+		fmt.Println("Starting HTTP server on port 8089")
+		http.ListenAndServe(":8089", nil)
+	}()
+
+	<-shutdown
+	fmt.Println("Shutting down...")
+	actorSystem.Stop(context.Background())
 }

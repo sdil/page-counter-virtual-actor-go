@@ -3,6 +3,8 @@ package main
 import (
 	"context"
 	"fmt"
+	"os"
+	"strconv"
 
 	"github.com/tochemey/goakt/v3/actor"
 )
@@ -22,12 +24,17 @@ func NewCounter(id string) actor.GrainFactory {
 
 func (c *Counter) OnActivate(ctx context.Context, props *actor.GrainProps) error {
 	fmt.Println("Activating counter", c.Id)
-	c.Value = 0
+	value, err := readIntFromFile(c.Id)
+	if err != nil {
+		c.Value = 0
+	}
+	c.Value = value
 	return nil
 }
 
 func (c *Counter) OnDeactivate(ctx context.Context, props *actor.GrainProps) error {
-	fmt.Println("Deactivating counter", c.Id)
+	fmt.Println("Deactivating counter %s, value: %d. Persisting state to file", c.Id, c.Value)
+	writeIntToFile(c.Id, c.Value)
 	return nil
 }
 
@@ -40,4 +47,19 @@ func (c *Counter) OnReceive(ctx *actor.GrainContext) {
 	default:
 		ctx.Unhandled()
 	}
+}
+
+// writeIntToFile writes an integer to a file as a string
+func writeIntToFile(filename string, value int) error {
+	content := strconv.Itoa(value)
+	return os.WriteFile(filename, []byte(content), 0644)
+}
+
+// readIntFromFile reads an integer from a file
+func readIntFromFile(filename string) (int, error) {
+	data, err := os.ReadFile(filename)
+	if err != nil {
+		return 0, err
+	}
+	return strconv.Atoi(string(data))
 }
