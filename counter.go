@@ -14,6 +14,8 @@ type Counter struct {
 	Value int
 }
 
+const statePath = "./state/%s.txt"
+
 var _ actor.Grain = (*Counter)(nil)
 
 func NewCounter(id string) actor.GrainFactory {
@@ -33,7 +35,7 @@ func (c *Counter) OnActivate(ctx context.Context, props *actor.GrainProps) error
 }
 
 func (c *Counter) OnDeactivate(ctx context.Context, props *actor.GrainProps) error {
-	fmt.Println("Deactivating counter %s, value: %d. Persisting state to file", c.Id, c.Value)
+	fmt.Println("Deactivating counter %s. Persisting state to file", c.Id, c.Value)
 	writeIntToFile(c.Id, c.Value)
 	return nil
 }
@@ -51,13 +53,15 @@ func (c *Counter) OnReceive(ctx *actor.GrainContext) {
 
 // writeIntToFile writes an integer to a file as a string
 func writeIntToFile(filename string, value int) error {
+	fmt.Println("Writing to file", filename, value)
 	content := strconv.Itoa(value)
-	return os.WriteFile(filename, []byte(content), 0644)
+	return os.WriteFile(fmt.Sprintf(statePath, filename), []byte(content), 0644)
 }
 
 // readIntFromFile reads an integer from a file
 func readIntFromFile(filename string) (int, error) {
-	data, err := os.ReadFile(filename)
+	fmt.Println("Reading from file", filename)
+	data, err := os.ReadFile(fmt.Sprintf(statePath, filename))
 	if err != nil {
 		return 0, err
 	}
