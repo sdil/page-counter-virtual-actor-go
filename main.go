@@ -16,8 +16,8 @@ func main() {
 	actorSystem, _ := actor.NewActorSystem("PageCounterActorSystem",
 		actor.WithActorInitMaxRetries(3),
 	)
-
-	actorSystem.Start(context.Background())
+	ctx := context.Background()
+	actorSystem.Start(ctx)
 
 	http.HandleFunc("/{id}", func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
@@ -25,20 +25,8 @@ func main() {
 		grain, _ := actorSystem.GrainIdentity(ctx, id, NewCounter(id))
 		message := &IncrementRequest{}
 
-		res, err := actorSystem.AskGrain(ctx, grain, message, time.Millisecond*10)
-		if err != nil {
-			fmt.Println("error", err.Error())
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-
-		count, ok := res.(*IncrementResponse)
-		if !ok {
-			fmt.Println("invalid response, failed to cast to *IncrementResponse")
-			http.Error(w, "invalid response", http.StatusInternalServerError)
-			return
-		}
-
+		res, _ := actorSystem.AskGrain(ctx, grain, message, time.Millisecond*10)
+		count, _ := res.(*IncrementResponse)
 		fmt.Fprintf(w, "ID %s, page count: %d", id, count.Value)
 	})
 
@@ -52,5 +40,5 @@ func main() {
 
 	<-shutdown
 	fmt.Println("Shutting down...")
-	actorSystem.Stop(context.Background())
+	actorSystem.Stop(ctx)
 }
