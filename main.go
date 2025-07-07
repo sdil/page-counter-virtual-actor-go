@@ -32,7 +32,7 @@ func main() {
 
 	shutdown := make(chan os.Signal, 1)
 	signal.Notify(shutdown, os.Interrupt, syscall.SIGTERM)
-	
+
 	go func() {
 		fmt.Println("Starting HTTP server on port 8089")
 		http.ListenAndServe(":8089", nil)

@@ -10,7 +10,7 @@ import (
 )
 
 type Counter struct {
-	Id string
+	Id    string
 	Value int
 }
 
@@ -35,7 +35,7 @@ func (c *Counter) OnActivate(ctx context.Context, props *actor.GrainProps) error
 }
 
 func (c *Counter) OnDeactivate(ctx context.Context, props *actor.GrainProps) error {
-	fmt.Println("Deactivating counter %s. Persisting state to file", c.Id, c.Value)
+	fmt.Printf("Deactivating counter ID: %s, value: %d. Persisting state.\n", c.Id, c.Value)
 	writeIntToFile(c.Id, c.Value)
 	return nil
 }
@@ -53,15 +53,17 @@ func (c *Counter) OnReceive(ctx *actor.GrainContext) {
 
 // writeIntToFile writes an integer to a file as a string
 func writeIntToFile(filename string, value int) error {
-	fmt.Println("Writing to file", filename, value)
+	path := fmt.Sprintf(statePath, filename)
+	fmt.Println("Writing to file", path)
 	content := strconv.Itoa(value)
-	return os.WriteFile(fmt.Sprintf(statePath, filename), []byte(content), 0644)
+	return os.WriteFile(path, []byte(content), 0644)
 }
 
 // readIntFromFile reads an integer from a file
 func readIntFromFile(filename string) (int, error) {
-	fmt.Println("Reading from file", filename)
-	data, err := os.ReadFile(fmt.Sprintf(statePath, filename))
+	path := fmt.Sprintf(statePath, filename)
+	fmt.Println("Reading from file", path)
+	data, err := os.ReadFile(path)
 	if err != nil {
 		return 0, err
 	}
