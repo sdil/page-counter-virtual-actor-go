@@ -25,8 +25,18 @@ func main() {
 		grain, _ := actorSystem.GrainIdentity(ctx, id, NewCounter(id))
 		message := &IncrementRequest{}
 
-		res, _ := actorSystem.AskGrain(ctx, grain, message, time.Millisecond*10)
-		count, _ := res.(*IncrementResponse)
+		res, err := actorSystem.AskGrain(ctx, grain, message, time.Millisecond*10)
+		if err != nil {
+			fmt.Println("cannot ask grain", err)
+			http.Error(w, "Internal server error", http.StatusInternalServerError)
+			return
+		}
+		count, ok := res.(*IncrementResponse)
+		if !ok {
+			fmt.Println("cannot cast response to IncrementResponse")
+			http.Error(w, "Internal server error", http.StatusInternalServerError)
+			return
+		}
 		fmt.Fprintf(w, "ID %s, page count: %d", id, count.Value)
 	})
 

@@ -41,7 +41,6 @@ func (c *Counter) OnDeactivate(ctx context.Context, props *actor.GrainProps) err
 }
 
 func (c *Counter) OnReceive(ctx *actor.GrainContext) {
-	fmt.Println("Received message", c.Id)
 	switch ctx.Message().(type) {
 	case *IncrementRequest:
 		c.Value++

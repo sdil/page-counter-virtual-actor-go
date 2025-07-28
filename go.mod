@@ -2,7 +2,10 @@ module page-counter
 
 go 1.24.4
 
-require github.com/tochemey/goakt/v3 v3.7.0
+require (
+	github.com/tochemey/goakt/v3 v3.8.0
+	google.golang.org/protobuf v1.36.6
+)
 
 require (
 	connectrpc.com/connect v1.18.1 // indirect
@@ -13,7 +16,7 @@ require (
 	github.com/buraksezer/consistent v0.10.0 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/deckarep/golang-set/v2 v2.8.0 // indirect
-	github.com/dgraph-io/badger/v4 v4.7.0 // indirect
+	github.com/dgraph-io/badger/v4 v4.8.0 // indirect
 	github.com/dgraph-io/ristretto/v2 v2.2.0 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
@@ -33,15 +36,15 @@ require (
 	github.com/hashicorp/logutils v1.0.0 // indirect
 	github.com/hashicorp/memberlist v0.5.3 // indirect
 	github.com/klauspost/compress v1.18.0 // indirect
-	github.com/klauspost/cpuid/v2 v2.2.11 // indirect
-	github.com/miekg/dns v1.1.66 // indirect
+	github.com/klauspost/cpuid/v2 v2.3.0 // indirect
+	github.com/miekg/dns v1.1.67 // indirect
 	github.com/mschoch/smat v0.2.0 // indirect
 	github.com/panjf2000/ants/v2 v2.11.3 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/redis/go-redis/v9 v9.11.0 // indirect
-	github.com/reugn/go-quartz v0.14.0 // indirect
+	github.com/reugn/go-quartz v0.15.0 // indirect
 	github.com/sean-/seed v0.0.0-20170313163322-e2103e2c3529 // indirect
-	github.com/tidwall/btree v1.7.0 // indirect
+	github.com/tidwall/btree v1.8.0 // indirect
 	github.com/tidwall/match v1.1.1 // indirect
 	github.com/tidwall/redcon v1.6.2 // indirect
 	github.com/tochemey/olric v0.2.3 // indirect
@@ -56,11 +59,10 @@ require (
 	go.uber.org/atomic v1.11.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go.uber.org/zap v1.27.0 // indirect
-	golang.org/x/mod v0.25.0 // indirect
-	golang.org/x/net v0.41.0 // indirect
-	golang.org/x/sync v0.15.0 // indirect
-	golang.org/x/sys v0.33.0 // indirect
-	golang.org/x/text v0.26.0 // indirect
-	golang.org/x/tools v0.34.0 // indirect
-	google.golang.org/protobuf v1.36.6 // indirect
+	golang.org/x/mod v0.26.0 // indirect
+	golang.org/x/net v0.42.0 // indirect
+	golang.org/x/sync v0.16.0 // indirect
+	golang.org/x/sys v0.34.0 // indirect
+	golang.org/x/text v0.27.0 // indirect
+	golang.org/x/tools v0.35.0 // indirect
 )
